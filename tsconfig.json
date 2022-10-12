@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "noImplicitReturns": true,
+      "noUnusedLocals": true,
+      "skipLibCheck": true,
+      "outDir": "dist",
+      "strict": true,
+      "target": "esNext"
+    },
+    "compileOnSave": true,
+    "include": ["src"],
+    "exclude": ["node_modules"]
+  }
+  
