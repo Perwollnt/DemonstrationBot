@@ -1,13 +1,19 @@
-import { SlashCommandBuilder, Client, CommandInteraction, CacheType, ChannelType, GuildChannel, CommandInteractionOption, REST } from "discord.js";
+import { SlashCommandBuilder, Client, CommandInteraction, CacheType, EmbedBuilder } from "discord.js";
 import { CommandInfo, SlashCommandInterface } from "../interfaces/Commands";
-import { messagesconfig } from "../settings/messages";
 import { config } from "dotenv";
 import { commandsconfig } from "../settings/commands";
+
+import { DatabaseManager } from "../helpers/DatabaseManager";
+import { systemsettings } from "../settings/system";
+import { SetStuff } from "../helpers/SetStuff";
 
 config();
 
 
 export class AdminCommand implements SlashCommandInterface {
+
+
+    db = new DatabaseManager();
 
     info: CommandInfo = {
         name: "admin",
@@ -34,14 +40,32 @@ export class AdminCommand implements SlashCommandInterface {
 
     private async roleselect(interaction: CommandInteraction) {
         let msg = "";
+        const embed = new EmbedBuilder()
+        .setTitle(commandsconfig.roleselect.embeds.selector.title)
+        .setColor(`#${systemsettings.embedcolor.replaceAll("#", "")}`);
         for(let e of commandsconfig.roleselect.roles) {
-            msg += `${e.emote} : ${e.text}\n`;
+            msg += commandsconfig.roleselect.embeds.selector.description.replaceAll("%e.e", e.emote).replaceAll("%e.name", e.text).replaceAll("%e.id", e.roleid) + "\n"
         }
+        embed.setDescription(msg);
 
-        interaction.channel?.send(msg).then(msg => {
+        
+
+        interaction.channel?.send({ embeds: [embed] }).then(async msg => {
             for(let e of commandsconfig.roleselect.roles) {
                 msg.react(e.emote);
+
             }
+            const c = await this.db.get(systemsettings.db.system)
+            if(!c) await SetStuff.setDefaultSystemData();
+            let e = c.reactmsgids as string[];
+            try {
+                e.push(msg.id);
+            } catch (error) {
+                e = [msg.id]
+            }
+            this.db.set(systemsettings.db.system, {
+                reactmsgids: e,
+            })
         });
     }
     

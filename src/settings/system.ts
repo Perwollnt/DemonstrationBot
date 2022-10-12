@@ -62,6 +62,7 @@ export const systemsettings = {
         "rm"
     ],
     db: {
-        path: "Dembot/%userid" //%userid = user's id
+        path: "Dembot/%user", //%user = user's id
+        system: "Dembot/system"
     }
 }

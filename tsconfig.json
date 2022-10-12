@@ -6,7 +6,9 @@
       "skipLibCheck": true,
       "outDir": "dist",
       "strict": true,
-      "target": "esNext"
+      "target": "esNext",
+      "resolveJsonModule": true,
+      "esModuleInterop": true,
     },
     "compileOnSave": true,
     "include": ["src"],

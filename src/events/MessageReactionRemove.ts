@@ -1,5 +1,6 @@
 import { MessageReaction, PartialMessageReaction, User, PartialUser, GuildMember, ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { DatabaseManager } from "../helpers/DatabaseManager";
+import { GetStuff } from "../helpers/GetStuff";
 import { SetStuff } from "../helpers/SetStuff";
 import { commandsconfig } from "../settings/commands";
 import { messagesconfig } from "../settings/messages";
@@ -9,8 +10,18 @@ export class MessageReactionRemove {
 
     db = new DatabaseManager();
     public async do(reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) {
+        if(user.bot || user.id == GetStuff.getBotId()) return;
         if(systemsettings.channels.selectors.role.indexOf(reaction.message.channel.id) == -1) return;
         const guildUser = reaction.message.guild?.members.cache.get(user.id) as GuildMember;
+
+        const msgids = (await this.db.get(systemsettings.db.system)).reactmsgids;
+        
+        let leta = false;
+        for(let e of msgids) {
+            if(e == reaction.message.id) leta = true;
+        }
+        if(!leta) return;
+
         for(let e of commandsconfig.roleselect.roles) {
             if(e.emote == reaction.emoji.name) {
                 guildUser.roles.remove(e.roleid);
@@ -36,10 +47,11 @@ export class MessageReactionRemove {
                     )
 
 
-                    user.send({ content: msg, components: [c] })
+                    return user.send({ content: msg, components: [c] })
                 }
                 
             }
         }
+        return;
     }
 }

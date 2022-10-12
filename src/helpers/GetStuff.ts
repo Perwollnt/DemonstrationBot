@@ -1,5 +1,8 @@
 import { ActivityType, Client, GatewayIntentBits, Partials } from "discord.js";
 
+import { config } from "dotenv";
+config();
+
 export class GetStuff {
     public static getClient() {
         return new Client({
@@ -24,6 +27,10 @@ export class GetStuff {
 
     public static getPartials() {
         return [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.GuildScheduledEvent, Partials.Reaction, Partials.ThreadMember, Partials.User];
+    }
+
+    public static getBotId() {
+        return process.env.BOTID;
     }
     
 }
