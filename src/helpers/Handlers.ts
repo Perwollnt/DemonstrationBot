@@ -1,23 +1,20 @@
 import { Client } from "discord.js";
 import { SlashCommandInterface } from "../interfaces/Commands";
 import { REST } from '@discordjs/rest';
-import { config } from "dotenv";
 import { Routes } from 'discord-api-types/v10';
-
-config();
+import { Logger } from "./Logger";
+import { GetStuff } from "./GetStuff";
 
 export class Handlers {
     static async command(client: Client, commands: Array<SlashCommandInterface>): Promise<void> {
-        console.log("Started refreshing application (/) commands.");
+        Logger.console({ text: "Started refreshing application (/) commands.",level: "SYSTEM" })
         const registercommands : any = [];
         commands.forEach(c => {
             registercommands.push(c.builder);
-            console.log(`Registered command: ${c.info.name}`);
+            Logger.console({ text: `Added command: ${c.info.name}`, level: "LOG" })
         });
-        const rest = new REST({version: '9'}).setToken(process.env.TOKEN!);
-        await rest.put( Routes.applicationCommands(process.env.BOTID!),
-        { body: registercommands } 
-        );
-        console.log("✔ Successfully reloaded application (/) commands.");
+        const rest = new REST({version: '9'}).setToken(GetStuff.bot.token);
+        await rest.put( Routes.applicationCommands(GetStuff.bot.id), { body: registercommands } );
+        Logger.console({ text: "✔ Successfully reloaded application (/) commands.", level: "SYSTEM" })
     }
 }

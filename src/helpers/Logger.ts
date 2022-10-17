@@ -1,16 +1,18 @@
-import { LoggerInterface } from "../interfaces/Logger";
-import { systemsettings } from "../settings/system";
-
-
 export class Logger {
-    log(log: LoggerInterface ) {
-        let msg = systemsettings.logmessage.replaceAll("%type%", systemsettings.logSettings.types[log.TYPE]).replaceAll("%message%", log.MESSAGE).replaceAll("%sender%", log.SENDER);
-        msg = msg.replaceAll("%level%", systemsettings.logSettings.levelcolor[log.LEVEL] + log.LEVEL);
-        msg = msg.replaceAll("$", systemsettings.logSettings.levelcolor[log.LEVEL]);
-        console.log(msg + "\u001b[0m");
+    public static async console(message: LoggerInterface) {
+        if(!message.level) return console.log(`\x1b[34m[SYS]: \x1b[37m${message.text}\x1b[39;49m`);
+        switch (message.level) {
+            case "ERROR":
+                return console.log(`\x1b[31m[ERR]: ${message.text}\x1b[39;49m`);
+            case "LOG":
+                return console.log(`\x1b[36m[LOG]: \x1b[37m${message.text}\x1b[39;49m`);
+            case "SYSTEM":
+                return console.log(`\x1b[34;1m[SYS]: \x1b[37m${message.text}\x1b[39;49m`);
+        }
     }
+}
 
-    loghook(msg: string) {
-
-    }
+export interface LoggerInterface {
+    text: string,
+    level: "LOG" | "SYSTEM" | "ERROR"
 }

@@ -25,6 +25,30 @@ export const messagesconfig = {
             dm: {
                 messages: "értesítések bekapcsolva!",
             }
+        },
+        rolled: {
+            dice: "You rolled the dice!..... And rolled a **%number** *(sides: %sides)*", //%number = rolled number, %sides = number given by the player
+        },
+        channel: {
+            not: {
+                same: {
+                    as: {
+                        bot: "Kérlek vagy húzz be magadhoz vagy lépj be a csatornámba!"
+                    }
+                }
+            }
+        }
+    },
+    bot: {
+        could: {
+            not: {
+                join: {
+                    channel: "I could not join your voice channel."
+                },
+                find: {
+                    music: "❌ | Track not found!"
+                }
+            }
         }
     },
     commands: {

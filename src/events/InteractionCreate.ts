@@ -5,11 +5,9 @@ import { Logger } from "../helpers/Logger";
 import { messagesconfig } from "../settings/messages";
 import { systemsettings } from "../settings/system";
 
-const logger = new Logger();
-
 export class InteractionCreate {
 
-    db = new DatabaseManager();
+    private db = new DatabaseManager();
 
     async do(interaction: Interaction) {
         if(interaction.isCommand()) this.handleCommandInteractions(interaction);
@@ -22,7 +20,7 @@ export class InteractionCreate {
             if(interaction.commandName == e.info.name) return e.onTriggered(interaction.client, interaction);
         }
         interaction.reply("Interaction is not registered (or a bigger problem)");
-        logger.log( { LEVEL: 4, MESSAGE: `Interaction (${interaction.commandName}) not found!`, SENDER: "InteractionCreate.ts:19", TYPE: "ERROR" } );
+        Logger.console({ text: `Interaction (${interaction.commandName}) not found!`, level: "ERROR" })
     }
 
     private async handleButtonInteractions(interaction: ButtonInteraction) {

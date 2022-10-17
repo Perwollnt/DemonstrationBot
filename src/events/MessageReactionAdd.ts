@@ -10,8 +10,8 @@ export class MessageReactionAdd {
 
     db = new DatabaseManager();
 
-    public async do(reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser) {
-        if(user.bot || user.id == GetStuff.getBotId()) return;
+    public async do(reaction: MessageReaction | PartialMessageReaction, user: User | PartialUser): Promise<any> {
+        if(user.bot || user.id == GetStuff.bot.id) return;
         if(systemsettings.channels.selectors.role.indexOf(reaction.message.channel.id) == -1) return;
 
         const msgids = (await this.db.get(systemsettings.db.system)).reactmsgids;

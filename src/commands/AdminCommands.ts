@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, Client, CommandInteraction, CacheType, EmbedBuilder } from "discord.js";
+import { SlashCommandBuilder, Client, CommandInteraction, CacheType, EmbedBuilder, PermissionsBitField } from "discord.js";
 import { CommandInfo, SlashCommandInterface } from "../interfaces/Commands";
 import { config } from "dotenv";
 import { commandsconfig } from "../settings/commands";
@@ -23,9 +23,10 @@ export class AdminCommand implements SlashCommandInterface {
     };
 
     builder = new SlashCommandBuilder()
-    .setName(this.info.name).setDescription(this.info.description)
+    .setName(this.info.name).setDescription(this.info.description).setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
     .addSubcommand(sc => sc.setName("help").setDescription("Help with the other commands"))
     .addSubcommand(sc => sc.setName("roleselect").setDescription("Help with the other commands"))
+    .addSubcommand(sc => sc.setName("stop").setDescription("stop the bot"))
 
     async onTriggered(client: Client<boolean>, interaction: CommandInteraction<CacheType>) {
         switch (interaction.options.data[0].name) {
@@ -33,6 +34,8 @@ export class AdminCommand implements SlashCommandInterface {
                 return interaction.reply("TODO: make help message (finished in other bot just copy paste)")
             case "roleselect":
                 return this.roleselect(interaction);
+            case "stop":
+                return process.exit();
             default:
                 break;
         }

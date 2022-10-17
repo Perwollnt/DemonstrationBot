@@ -11,6 +11,7 @@ export class SetStuff {
         console.log("set default data triggered");
         await db.set(systemsettings.db.path.replaceAll("%user", user), {
             sendmessages: true,
+            voicechannel: null,
         });
         return "";
     }

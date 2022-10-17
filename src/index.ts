@@ -1,9 +1,6 @@
 // < Imports >
 import { BotClient } from "./client";
-import { config } from "dotenv";
-
-// Dotenv config
-config();
+import { GetStuff } from "./helpers/GetStuff";
 
 //Start bot
-new BotClient(process.env.TOKEN!);
+new BotClient(GetStuff.bot.token);
